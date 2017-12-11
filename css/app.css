@@ -69,6 +69,7 @@ h1 {
     transform: rotateY(0);
     background: #02b3e4;
     cursor: default;
+
 }
 
 .deck .card.show {
@@ -79,32 +80,6 @@ h1 {
     cursor: default;
     background: #02ccba;
     font-size: 33px;
-}
-
-/*
-* Card Animations
-*/
-/*Wrong guess*/
-.wrong {
-    width: 100px;
-    height: 100px;
-    background: red;
-    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
-    animation-name: example;
-    animation-duration: 4s;
-}
-
-/* Safari 4.0 - 8.0 */
-@-webkit-keyframes example {
-    from {background: red;}
-    to {background: yellow;}
-}
-
-/* Standard syntax */
-@keyframes example {
-    from {background: red;}
-    to {background: yellow;}
 }
 
 /*
@@ -133,3 +108,22 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+.remove-star {
+  color: #C5BFCB;
+}
+
+/* Card Animations*/
+
+/* .wrong-animation {
+  animation-name: wrong-animation;
+  animation-duration: 1s;
+}
+
+@keyframes wrong-animation {
+  0%    {background: green}
+  25%   {background: yellow}
+  50%   {background: red}
+  75%   {background: blue}
+  100%  {background: lime}
+} */

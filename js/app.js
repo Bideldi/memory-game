@@ -1,21 +1,21 @@
-// List of fonts class names
+// List of symbol fonts classes
 var givenCardsArray = [
-  "fa fa-diamond",
-  "fa fa-paper-plane-o",
-  "fa fa-anchor",
-  "fa fa-bolt",
-  "fa fa-cube",
-  "fa fa-leaf",
-  "fa fa-bicycle",
-  "fa fa-bomb",
-  "fa fa-diamond",
-  "fa fa-paper-plane-o",
-  "fa fa-anchor",
-  "fa fa-bolt",
-  "fa fa-cube",
-  "fa fa-leaf",
-  "fa fa-bicycle",
-  "fa fa-bomb"
+  "fa-diamond",
+  "fa-paper-plane-o",
+  "fa-anchor",
+  "fa-bolt",
+  "fa-cube",
+  "fa-leaf",
+  "fa-bicycle",
+  "fa-bomb",
+  "fa-diamond",
+  "fa-paper-plane-o",
+  "fa-anchor",
+  "fa-bolt",
+  "fa-cube",
+  "fa-leaf",
+  "fa-bicycle",
+  "fa-bomb"
 ];
 
 // Selects the Element with the class .deck and stores it in the variable deck
@@ -26,7 +26,7 @@ var shuffledCardsArray = shuffle(givenCardsArray);
 
 // Generates the HTML Codes for the cards and append each element to the deck
 for (var num = 0; num < 16; num += 1) {
-  $(deck).append('<li class="card"><i class="' + givenCardsArray[num] + '"></i></li>');
+  $(deck).append('<li class="card"><i class="fa ' + givenCardsArray[num] + '"></i></li>');
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -44,52 +44,90 @@ function shuffle(array) {
     return array;
 }
 
-// If a card is clicked: display the card's symbol.
-// Stores the <li> element in the variable clickedCard
-// Stores the class names in the variable clickedCardClass
-// Compares if the card is already clicked via the class names
+// Main functions if card is clicked
+// Call function checkClickedCard, if already clicked nothing is to do
+// If card is not already clicked, add class clicked, call showCard and storeOpenCard
 $('.card').on('click', function() {
+  console.log('A card is clicked')
   var clickedCard = this;
-  var clickedCardClass = $(clickedCard).attr('class');
-  if (clickedCardClass === 'card open show' || clickedCardClass === 'card open show match') {
-    console.log('nothing to click'); // if card has classes card open show or card open show match prevent click
+  if (checkClickedCard(clickedCard) === true) {
+    console.log('nothing to click');
   } else {
+    $(clickedCard).addClass('clicked');
     console.log('show and store card');
     showCard(clickedCard);
     storeOpenCard(clickedCard);
   }
 });
 
-// Shows the symbol of the card (Adds class open show if the card is clicked)
-function showCard(clickedCard) {
-  $(clickedCard).addClass('open show');
+
+// Checks if clicked card is already clicked to prevent double click the same card
+function checkClickedCard(clickedCard) {
+  if ($(clickedCard).hasClass('clicked')) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
-// Hides symbol of the card (removes class open show from the two incorrect cards)
-// ev. with forEach or each is simpler!?
+// Shows the symbol of the card (Adds class open show if the card is clicked)
+function showCard(clickedCard) {
+  console.log('showCard() is called');
+  $(clickedCard).addClass('open show');
+  // $(clickedCard).effect( "bounce", "slow"); not working, second card won't show symbol, but why?
+}
+
+// Wrong Animation
+function wrongAnimation() {
+  console.log('wrongAnimation() is called');
+  // $(openCards[0]).addClass('wrong-animation');
+  // $(openCards[1]).addClass('wrong-animation');
+  $(openCards[0]).effect( "shake", "slow" );
+  $(openCards[1]).effect( "shake", "slow" );
+  console.log(openCards);
+}
+
+// Correct Animation
+function correctAnimation() {
+  $(openCards[0]).effect( "pulsate", "slow" );
+  $(openCards[1]).effect( "pulsate", "slow" );
+}
+// Remove class clicked open show
 function hideCard() {
-  var openCard1 = $('.'+ openCards[0]);
-  var parentElement = $(openCard1).parent('li');
-  // hide Animation, same symbol cards are animated, not that what I want!
-  $(parentElement).addClass('wrong');
-  $(parentElement).removeClass('open show');
+  console.log('hideCard() is called');
+  console.log(openCards);
+  $(openCards[0]).removeClass('clicked open show');
+  $(openCards[1]).removeClass('clicked open show');
 }
 
 // Array for open cards
 var openCards = []
 
-// Stores the class from the card which was clicked
-// If theres no element in the array, the class get stored in the first position
-// If theres already one element stored in the array, the class get stored in the second position
-// split(' ')[1] get the second class, example 'fa-leaf' and not 'fa fa-leaf' attention blank space between Anfuehrungszeichen
-//https://stackoverflow.com/questions/4239947/how-to-get-the-second-class-name-from-element
 function storeOpenCard(clickedCard) {
-  var cardClass = $(clickedCard).children('i').attr('class').split(' ')[1];
   if (openCards.length < 1) {
-    openCards[0] = cardClass;
+    openCards[0] = clickedCard;
   } else if (openCards.length < 2){
-    openCards[1] = cardClass;
+    openCards[1] = clickedCard;
     compareCards();
+  }
+}
+
+// moveCounter()
+// https://api.jquery.com/nth-child-selector/
+var count = 0;
+function moveCounter() {
+  count += 1;
+  console.log('Counter :' + count)
+  $('.moves').text(count);
+  if (count == 10) {
+    var star1 = $('.stars').find('i').get(0)
+    $(star1).addClass('remove-star');
+  } else if (count == 20){
+    var star2 = $('.stars').find('i').get(1)
+    $(star2).addClass('remove-star');
+  } else if (count == 30) {
+    var star3 = $('.stars').find('i').get(2)
+    $(star3).addClass('remove-star');
   }
 }
 
@@ -97,12 +135,23 @@ function storeOpenCard(clickedCard) {
 // If they match, the function matchedCards is called
 // If the don't match the function hideCard is called
 function compareCards() {
-  if (openCards[0] == openCards[1]) {
+  var card1Class = $(openCards[0]).children('i').attr('class').split(' ')[1];
+  var card2Class = $(openCards[1]).children('i').attr('class').split(' ')[1];
+  if (card1Class == card2Class) {
     console.log('They match');
+    correctAnimation();
     matchedCards();
+    moveCounter();
+    openCards = [] // empties the array
   } else {
     console.log('They dont match');
-    hideCard();
+    wrongAnimation();
+    console.log(openCards);
+    setTimeout(hideCard, 2000);
+    // hideCard();
+    moveCounter();
+    openCards = [] // empties the array
+    // Das Problem: die Kartenobjekte sind nicht mehr im Array gespeichert, sondern bereits leer. Aber wieso?
   }
 }
 
@@ -110,9 +159,8 @@ function compareCards() {
 // sets a dot before the matched Class like '.'+'fa-leaf' => .fa-leaf
 // stores the parent li element from the matched Class to manipulate / add the class match to the element
 function matchedCards() {
-  var matchedClass = $('.'+ openCards[0]);
-  var parentElement = $(matchedClass).parent('li');
-  $(parentElement).addClass('match');
+  $(openCards[0]).addClass('match');
+  $(openCards[1]).addClass('match');
 }
 
 // Put in the codeblock a function to call and test it
