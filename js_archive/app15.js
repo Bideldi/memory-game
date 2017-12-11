@@ -24,13 +24,9 @@ var deck = $('.deck');
 // Creates an array with shuffled symbol classes
 var shuffledCardsArray = shuffle(givenCardsArray);
 
-generateDeck();
-
 // Generates the HTML Codes for the cards and append each element to the deck
-function generateDeck() {
-  for (var num = 0; num < 16; num += 1) {
-    $(deck).append('<li class="card"><i class="fa ' + givenCardsArray[num] + '"></i></li>');
-  }
+for (var num = 0; num < 16; num += 1) {
+  $(deck).append('<li class="card"><i class="fa ' + givenCardsArray[num] + '"></i></li>');
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -44,6 +40,7 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
+
     return array;
 }
 
@@ -51,7 +48,6 @@ function shuffle(array) {
 // Call function checkClickedCard, if already clicked nothing is to do
 // If card is not already clicked, add class clicked, call showCard and storeOpenCard
 $('.card').on('click', function() {
-  console.log('A card is clicked')
   var clickedCard = this;
   if (checkClickedCard(clickedCard) === true) {
     console.log('nothing to click');
@@ -64,9 +60,9 @@ $('.card').on('click', function() {
 });
 
 
-// Checks if clicked card is already clicked to prevent double click the same card. Checks if the cards have the class preventClick before comparing the two cards.
+// Checks if clicked card is already clicked to prevent double click the same card
 function checkClickedCard(clickedCard) {
-  if ($(clickedCard).hasClass('clicked') || $('.card').hasClass('preventclick')) {
+  if ($(clickedCard).hasClass('clicked')) {
     return true;
   } else {
     return false;
@@ -83,11 +79,8 @@ function showCard(clickedCard) {
 // Wrong Animation
 function wrongAnimation() {
   console.log('wrongAnimation() is called');
-  // $(openCards[0]).addClass('wrong-animation');
-  // $(openCards[1]).addClass('wrong-animation');
   $(openCards[0]).effect( "shake", "slow" );
   $(openCards[1]).effect( "shake", "slow" );
-  console.log(openCards);
 }
 
 // Correct Animation
@@ -98,19 +91,19 @@ function correctAnimation() {
 // Remove class clicked open show
 function hideCard() {
   console.log('hideCard() is called');
-  console.log(openCards);
   $(openCards[0]).removeClass('clicked open show');
   $(openCards[1]).removeClass('clicked open show');
 }
 
 // Array for open cards
-var openCards = [];
+var openCards = []
 
 function storeOpenCard(clickedCard) {
   if (openCards.length < 1) {
     openCards[0] = clickedCard;
   } else if (openCards.length < 2){
     openCards[1] = clickedCard;
+    console.log(openCards);
     compareCards();
   }
 }
@@ -119,19 +112,18 @@ function storeOpenCard(clickedCard) {
 // https://api.jquery.com/nth-child-selector/
 var count = 0;
 function moveCounter() {
-  console.log('moveCounter() is called');
   count += 1;
   console.log('Counter :' + count)
   $('.moves').text(count);
-  if (count == 10) {
+  if (count == 1) {
     var star1 = $('.stars').find('i').get(0)
-    $(star1).addClass('remove-star');
-  } else if (count == 20){
+    $(star1).addClass('remove_star');
+  } else if (count == 2){
     var star2 = $('.stars').find('i').get(1)
-    $(star2).addClass('remove-star');
-  } else if (count == 30) {
+    $(star2).addClass('remove_star');
+  } else if (count == 3) {
     var star3 = $('.stars').find('i').get(2)
-    $(star3).addClass('remove-star');
+    $(star3).addClass('remove_star');
   }
 }
 
@@ -139,8 +131,6 @@ function moveCounter() {
 // If they match, the function matchedCards is called
 // If the don't match the function hideCard is called
 function compareCards() {
-  preventClick();
-  console.log('compareCards() is called')
   var card1Class = $(openCards[0]).children('i').attr('class').split(' ')[1];
   var card2Class = $(openCards[1]).children('i').attr('class').split(' ')[1];
   if (card1Class == card2Class) {
@@ -148,19 +138,16 @@ function compareCards() {
     correctAnimation();
     matchedCards();
     moveCounter();
-    openCards = []; // empties the array
-    removePreventClick();
+    openCards = [] // empties the array
   } else {
     console.log('They dont match');
     wrongAnimation();
-    console.log(openCards);
-    setTimeout(function() {
+    hideCard();
+    /* setTimeout(function() {
       hideCard();
-      moveCounter();
-      openCards = [];
-      removePreventClick();
-    },2000);
-    // https://www.sitepoint.com/jquery-settimeout-function-examples/
+    }, 2000); */
+    moveCounter();
+    openCards = [] // empties the array
   }
 }
 
@@ -168,41 +155,9 @@ function compareCards() {
 // sets a dot before the matched Class like '.'+'fa-leaf' => .fa-leaf
 // stores the parent li element from the matched Class to manipulate / add the class match to the element
 function matchedCards() {
-  console.log('matchedCards() is called')
   $(openCards[0]).addClass('match');
   $(openCards[1]).addClass('match');
 }
-
-// !!!!!!! I have to add the class preventclick to every element before the cards are compared and remove the class preventclick after the comparison? Pay attention that the counter is also working correct. Because if I click to fast, it maybe won't work correctly
-
-//
-// Prevent Click Event on cards
-// https://api.jquery.com/event.stopimmediatepropagation/
-function preventClick() {
-  $('.card').each(function( index ) {
-    $('.card').addClass('preventclick');
-  });
-  /* $('.card').click(function( event ) {
-    event.stopImmediatePropagation();
-  }); */
-}
-
-// Remove Prevent Click Event on card
-function removePreventClick() {
-  $('.card').each(function( index ) {
-    $('.card').removeClass('preventclick');
-  });
-}
-
-// resetGame() empties array, reset var count to 0,
-$('.restart').on('click', function resetGame() {
-  console.log('restartGame() is called');
-  openCards = [];
-  count = 0;
-  shuffle(givenCardsArray);
-  generateDeck();
-});
-
 
 // Put in the codeblock a function to call and test it
 $('#my-button').on('click', function() {
