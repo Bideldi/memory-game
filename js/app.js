@@ -106,9 +106,10 @@ function storeOpenCard(clickedCard) {
   }
 }
 
-/* Move Counter and Stars */
+/* Move Counter, Matched Pair Counter and Stars */
 var count = 0;
 var starIndex = 0;
+var matchedPairCount = 0;
 
 // Function countReset() sets variable count and HTML text back to 0
 function countReset() {
@@ -162,6 +163,7 @@ function compareCards() {
     setTimeout(function() {
       matchedCards();
       moveCounter();
+      winGame();
       openCards = []; // empties the array
       removePreventClick();
     },500);
@@ -201,10 +203,23 @@ function removePreventClick() {
   });
 }
 
+// Win Game Function
+function winGame() {
+  matchedPairCount += 1;
+  console.log('Pairs matched: ' + matchedPairCount);
+  if (matchedPairCount === 8) {
+    console.log('Success');
+  }
+}
+// Count all ul li with class match
+// If number of matches is === 16 => Display Congratulate HTML Code with how much time and the star rating. Also Ask für Restart the game.
+
+
 // Empties array, reset move count, stars index to 0,
 $('.restart').on('click', function() {
   countReset();
   starsReset();
+  matchedPairCount = 0;
   openCards = [];
   $(deck).empty();
   shuffle(givenCardsArray);
