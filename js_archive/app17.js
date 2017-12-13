@@ -51,12 +51,13 @@ function shuffle(array) {
 // Call function checkClickedCard, if already clicked nothing is to do
 // If card is not already clicked, add class clicked, call showCard and storeOpenCard
 $('.card').on('click', function() {
+  console.log('A card is clicked')
   var clickedCard = this;
   if (checkClickedCard(clickedCard) === true) {
-    console.log('Nothing to click!')
+    console.log('nothing to click');
   } else {
-    console.log('A card is clicked!')
     $(clickedCard).addClass('clicked');
+    console.log('show and store card');
     showCard(clickedCard);
     storeOpenCard(clickedCard);
   }
@@ -74,14 +75,19 @@ function checkClickedCard(clickedCard) {
 
 // Shows the symbol of the card (Adds class open show if the card is clicked)
 function showCard(clickedCard) {
+  console.log('showCard() is called');
   $(clickedCard).addClass('open show');
+  // $(clickedCard).effect( "bounce", "slow"); not working, second card won't show symbol, but why?
 }
-// !!!! Do I have to add CSS Animations like in the video? What is with the card flip integration?
 
 // Wrong Animation
 function wrongAnimation() {
+  console.log('wrongAnimation() is called');
+  // $(openCards[0]).addClass('wrong-animation');
+  // $(openCards[1]).addClass('wrong-animation');
   $(openCards[0]).effect( "shake", "slow" );
   $(openCards[1]).effect( "shake", "slow" );
+  console.log(openCards);
 }
 
 // Correct Animation
@@ -91,6 +97,8 @@ function correctAnimation() {
 }
 // Remove class clicked open show
 function hideCard() {
+  console.log('hideCard() is called');
+  console.log(openCards);
   $(openCards[0]).removeClass('clicked open show');
   $(openCards[1]).removeClass('clicked open show');
 }
@@ -107,105 +115,76 @@ function storeOpenCard(clickedCard) {
   }
 }
 
-/* Move Counter and Stars */
+// moveCounter()
+// https://api.jquery.com/nth-child-selector/
 var count = 0;
-var starIndex = 0;
-var starCountResult = 3; // For Endresult as number in the HTML Code
-
-// Adds 1 to the counter after a pair of cards is clicked and display the number in the HTML text
 function moveCounter() {
+  console.log('moveCounter() is called');
   count += 1;
+  console.log('Counter :' + count)
   $('.moves').text(count);
-  starRating();
-}
-
-// Checks how many moves are made, after the defined number of moves it calls the removeStar function
-function starRating() {
-  if (count == 16) {
-    removeStar(starIndex);
-  } else if (count == 25) {
-    removeStar(starIndex);
+  if (count == 10) {
+    var star1 = $('.stars').find('i').get(0)
+    $(star1).addClass('remove-star');
+  } else if (count == 20){
+    var star2 = $('.stars').find('i').get(1)
+    $(star2).addClass('remove-star');
   } else if (count == 30) {
-    removeStar(starIndex)
+    var star3 = $('.stars').find('i').get(2)
+    $(star3).addClass('remove-star');
   }
-}
-
-// Removes a black star on position (index)
-// It adds the css class remove-star which sets the color to #C5BFCB
-function removeStar(index) {
-  var star = $('.stars').find('i').get(index);
-    $(star).addClass('remove-star');
-    starIndex += 1;
-    starCountResult -= 1;
-}
-
-// Function countReset() sets variable count and HTML text back to 0
-function countReset() {
-  count = 0;
-  $('.moves').text(count);
-}
-
-// Function starsReset() removes the class remove-star to show 3 black stars
-function starsReset() {
-  starIndex = 0;
-  $('.stars').find('i').each(function(index) {
-    $('i').removeClass('remove-star');
-  });
 }
 
 // Checks if the 2 clicked cards stored in the openCards Array do match
 // If they match, the function matchedCards is called
 // If the don't match the function hideCard is called
-// https://www.sitepoint.com/jquery-settimeout-function-examples/
 function compareCards() {
   preventClick();
+  console.log('compareCards() is called')
   var card1Class = $(openCards[0]).children('i').attr('class').split(' ')[1];
   var card2Class = $(openCards[1]).children('i').attr('class').split(' ')[1];
   if (card1Class == card2Class) {
+    console.log('They match');
     correctAnimation();
-    moveCounter();
-    matchedCards();
     setTimeout(function() {
+      matchedCards();
+      moveCounter();
       openCards = []; // empties the array
       removePreventClick();
     },500);
   } else {
+    console.log('They dont match');
     wrongAnimation();
-    moveCounter();
+    console.log(openCards);
     setTimeout(function() {
       hideCard();
+      moveCounter();
       openCards = [];
       removePreventClick();
     },1000);
+    // https://www.sitepoint.com/jquery-settimeout-function-examples/
   }
 }
 
 // Function matchedCards ads the class 'match' to the correct cards
 // sets a dot before the matched Class like '.'+'fa-leaf' => .fa-leaf
 // stores the parent li element from the matched Class to manipulate / add the class match to the element
-// counts the matched pairs and if it are 8 pairs call the winGame() function
-var matchedPairCount = 0;
-
 function matchedCards() {
+  console.log('matchedCards() is called')
   $(openCards[0]).addClass('match');
   $(openCards[1]).addClass('match');
-  matchedPairCount += 1;
-  console.log('Pairs matched: ' + matchedPairCount);
-  if (matchedPairCount === 8) {
-    console.log('Success');
-    setTimeout(function() {
-      winGame();
-    },500);
-  }
 }
 
 //
-// Prevent Click Event on cards !!!!! Maybe it simpler to use toggle Class
+// Prevent Click Event on cards
 // https://api.jquery.com/event.stopimmediatepropagation/
 function preventClick() {
   $('.card').each(function( index ) {
     $('.card').addClass('preventclick');
   });
+  /* $('.card').click(function( event ) {
+    event.stopImmediatePropagation();
+  }); */
 }
 
 // Remove Prevent Click Event on card
@@ -215,53 +194,21 @@ function removePreventClick() {
   });
 }
 
-// Win Game Function
-// https://stackoverflow.com/questions/805107/creating-multiline-strings-in-javascript
-//https://stackoverflow.com/questions/13806621/setting-a-js-variable-and-using-it-in-html-tag
-function winGame() {
-  console.log('winGame() is called');
-  /*var starRatingHTML = '<p>Your Star Rating is: </p>';
-  $('.header').text('You Win!');
-  $(starRatingHTML).insertAfter('.header-tag');*/
-
-  $('.container').empty();
-  $('.container').html(
-    `<header>
-      <h1>Congratulations! You Won!</h1>
-    </header>
-    <p>Your moves are: <strong>` + count + `</strong></p>
-    <p>Your star rating is: <strong>` + starCountResult + `</strong></p>
-    <button type='button' class='restart'>Click here to restart the game!</button>
-    <script>
-      $('.restart').on('click', function() {
-        location.reload();
-      });
-    </script>
-    </section>`
-  );
-}
-// Display Congratulate HTML Code with how much time and the star rating. Also Ask for Restart the game.
-
-
-// Empties array, reset move count, stars index to 0,
-$('.restart').on('click', function() {
-  console.log('restart is clicked');
-  countReset();
-  starsReset();
-  matchedPairCount = 0;
-  openCards = [];
-  $(deck).empty();
+// resetGame() empties array, reset var count to 0,
+$('.restart').on('click', function resetGame(openCards) {
+  console.log('resetGame() is called');
   shuffle(givenCardsArray);
+  $(deck).empty();
   generateDeck();
-  console.log(count);
-  console.log(starIndex);
-  console.log(openCards);
-  location.reload(); // https://www.tutorialrepublic.com/faq/how-to-refresh-a-page-with-jquery.php
+  console.log('resetGame is executed');
 });
 
-$('.win-button').on('click', function() {
-  winGame();
+
+// Put in the codeblock a function to call and test it
+$('#my-button').on('click', function() {
+
 });
+
 //
 /*
  * set up the event listener for a card. If a card is clicked:

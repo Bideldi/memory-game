@@ -76,7 +76,6 @@ function checkClickedCard(clickedCard) {
 function showCard(clickedCard) {
   $(clickedCard).addClass('open show');
 }
-// !!!! Do I have to add CSS Animations like in the video? What is with the card flip integration?
 
 // Wrong Animation
 function wrongAnimation() {
@@ -107,25 +106,32 @@ function storeOpenCard(clickedCard) {
   }
 }
 
-/* Move Counter and Stars */
+/* Move Counter, Matched Pair Counter and Stars */
 var count = 0;
 var starIndex = 0;
-var starCountResult = 3; // For Endresult as number in the HTML Code
+var matchedPairCount = 0;
 
-// Adds 1 to the counter after a pair of cards is clicked and display the number in the HTML text
-function moveCounter() {
-  count += 1;
+// Function countReset() sets variable count and HTML text back to 0
+function countReset() {
+  count = 0;
   $('.moves').text(count);
-  starRating();
 }
 
-// Checks how many moves are made, after the defined number of moves it calls the removeStar function
+// Removes the class remove-star to show 3 black stars
+function starsReset() {
+  starIndex = 0;
+  $('.stars').find('i').each(function(index) {
+    $('i').removeClass('remove-star');
+  });
+}
+
+// Checks how many moves are made, after a certain amount of moves it calls the removeStar function
 function starRating() {
-  if (count == 16) {
+  if (count == 1) {
     removeStar(starIndex);
-  } else if (count == 25) {
+  } else if (count == 2) {
     removeStar(starIndex);
-  } else if (count == 30) {
+  } else if (count == 3) {
     removeStar(starIndex)
   }
 }
@@ -136,21 +142,13 @@ function removeStar(index) {
   var star = $('.stars').find('i').get(index);
     $(star).addClass('remove-star');
     starIndex += 1;
-    starCountResult -= 1;
 }
 
-// Function countReset() sets variable count and HTML text back to 0
-function countReset() {
-  count = 0;
+// Adds 1 to the counter after a pair of cards is clicked and display the number in the HTML text
+function moveCounter() {
+  count += 1;
   $('.moves').text(count);
-}
-
-// Function starsReset() removes the class remove-star to show 3 black stars
-function starsReset() {
-  starIndex = 0;
-  $('.stars').find('i').each(function(index) {
-    $('i').removeClass('remove-star');
-  });
+  starRating();
 }
 
 // Checks if the 2 clicked cards stored in the openCards Array do match
@@ -165,6 +163,7 @@ function compareCards() {
     correctAnimation();
     moveCounter();
     matchedCards();
+    winGame();
     setTimeout(function() {
       openCards = []; // empties the array
       removePreventClick();
@@ -183,24 +182,13 @@ function compareCards() {
 // Function matchedCards ads the class 'match' to the correct cards
 // sets a dot before the matched Class like '.'+'fa-leaf' => .fa-leaf
 // stores the parent li element from the matched Class to manipulate / add the class match to the element
-// counts the matched pairs and if it are 8 pairs call the winGame() function
-var matchedPairCount = 0;
-
 function matchedCards() {
   $(openCards[0]).addClass('match');
   $(openCards[1]).addClass('match');
-  matchedPairCount += 1;
-  console.log('Pairs matched: ' + matchedPairCount);
-  if (matchedPairCount === 8) {
-    console.log('Success');
-    setTimeout(function() {
-      winGame();
-    },500);
-  }
 }
 
 //
-// Prevent Click Event on cards !!!!! Maybe it simpler to use toggle Class
+// Prevent Click Event on cards
 // https://api.jquery.com/event.stopimmediatepropagation/
 function preventClick() {
   $('.card').each(function( index ) {
@@ -216,36 +204,20 @@ function removePreventClick() {
 }
 
 // Win Game Function
-// https://stackoverflow.com/questions/805107/creating-multiline-strings-in-javascript
-//https://stackoverflow.com/questions/13806621/setting-a-js-variable-and-using-it-in-html-tag
+// !! I think its better to add += 1 in the matchedCards() function and if its 8 than call the winGame() function!!!!!!
 function winGame() {
-  console.log('winGame() is called');
-  /*var starRatingHTML = '<p>Your Star Rating is: </p>';
-  $('.header').text('You Win!');
-  $(starRatingHTML).insertAfter('.header-tag');*/
-
-  $('.container').empty();
-  $('.container').html(
-    `<header>
-      <h1>Congratulations! You Won!</h1>
-    </header>
-    <p>Your moves are: <strong>` + count + `</strong></p>
-    <p>Your star rating is: <strong>` + starCountResult + `</strong></p>
-    <button type='button' class='restart'>Click here to restart the game!</button>
-    <script>
-      $('.restart').on('click', function() {
-        location.reload();
-      });
-    </script>
-    </section>`
-  );
+  matchedPairCount += 1;
+  console.log('Pairs matched: ' + matchedPairCount);
+  if (matchedPairCount === 8) {
+    console.log('Success');
+  }
 }
-// Display Congratulate HTML Code with how much time and the star rating. Also Ask for Restart the game.
+// Count all ul li with class match
+// If number of matches is === 16 => Display Congratulate HTML Code with how much time and the star rating. Also Ask for Restart the game.
 
 
 // Empties array, reset move count, stars index to 0,
 $('.restart').on('click', function() {
-  console.log('restart is clicked');
   countReset();
   starsReset();
   matchedPairCount = 0;
@@ -256,12 +228,14 @@ $('.restart').on('click', function() {
   console.log(count);
   console.log(starIndex);
   console.log(openCards);
-  location.reload(); // https://www.tutorialrepublic.com/faq/how-to-refresh-a-page-with-jquery.php
 });
 
-$('.win-button').on('click', function() {
-  winGame();
+
+// Put in the codeblock a function to call and test it
+$('#my-button').on('click', function() {
+
 });
+
 //
 /*
  * set up the event listener for a card. If a card is clicked:
