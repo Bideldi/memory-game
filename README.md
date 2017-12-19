@@ -18,3 +18,6 @@ For specific, detailed instructions, look at the project instructions in the [Ud
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Tipp from Michael
+Prinzipiell würde ich es immer so einfach wie möglich machen. Wenn man eine Karte klickt, kann man ihr eine neue Klasse "clicked" anhängen. Bei der zweiten ebenso. Dann nimmt man die beiden Karten mit der neuen Klasse "clicked" und vergleicht, ob sie bspw. beide das gleiche Icon haben. Wenn ja, dann fügt man beiden die Klasse "solved" hinzu und nimmt "clicked" wieder weg.
