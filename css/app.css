@@ -113,17 +113,6 @@ h1 {
   color: #C5BFCB;
 }
 
-/* Card Animations*/
-
-/* .wrong-animation {
-  animation-name: wrong-animation;
-  animation-duration: 1s;
+.restart-button {
+  /* cursor: pointer; */
 }
-
-@keyframes wrong-animation {
-  0%    {background: green}
-  25%   {background: yellow}
-  50%   {background: red}
-  75%   {background: blue}
-  100%  {background: lime}
-} */
