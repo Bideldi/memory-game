@@ -33,4 +33,5 @@ For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Sources
 ### Font Awesome
 Font symbols for the cards
-Link https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css
+
+Link: https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css
