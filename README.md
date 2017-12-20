@@ -31,7 +31,24 @@ For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 - If you're stuck, you can click the replay button
 
 ## Sources
-### Font Awesome
-Font symbols for the cards
 
-Link: https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css
+### Starter Code
+Starter Code: https://www.udacity.com/
+
+### Font Awesome
+Font symbols for the cards:  http://fontawesome.io/
+
+### Text Font
+Text Font: https://fonts.google.com/
+
+### Animations
+Animate CSS: https://daneden.github.io/animate.css/
+
+### Sounds
+Game Sounds: http://www.noiseforfun.com/
+
+### jQuery Framework
+JavaScript Library: https://jquery.com/
+
+### Time Indicator
+jQuery Timer: http://jquerytimer.com/
