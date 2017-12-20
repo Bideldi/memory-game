@@ -10,13 +10,6 @@
 
 To play the game you can clone or download this game by pressing the "Clone or download"-button and start the index.html file.
 
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
-
 ## Gameplay
 
 - At first, you have to enter your name
