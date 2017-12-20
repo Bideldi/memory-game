@@ -1,6 +1,3 @@
-/* Player Name */
-var playerName = prompt('Please enter your name');
-
 // Array with css font classes which acts as cards from http://fontawesome.io/
 var givenCardsArray = [
   "fa-ambulance",
@@ -242,14 +239,12 @@ function starRating() {
 }
 
 // Removes a black star on position (index)
-// It animates the star and after the animation ends it adds the css class remove-star which sets the color to #C5BFCB
+// It adds the css class remove-star which sets the color to #C5BFCB
 function removeStar(index) {
   var star = $('.stars').find('i').get(index);
-    $(star).animateCss('jello', function() {
-      $(star).addClass('remove-star');
-      starIndex += 1;
-      starCountResult -= 1;
-    });
+    $(star).addClass('remove-star');
+    starIndex += 1;
+    starCountResult -= 1;
 }
 
 // Function moveCountReset() sets variable moveCount and HTML text back to 0
@@ -312,12 +307,12 @@ function winGame(duration) {
   $('.container').empty();
   $('.container').html(
     `<header>
-      <h1>Congratulations ` + playerName + `! You Won!</h1>
+      <h1>Congratulations! You Won!</h1>
     </header>
     <p>Your moves are: <strong>` + moveCount + `</strong></p>
     <p>Your star rating is: <strong>` + starCountResult + `</strong></p>
     <p>Your time is: <strong>` + duration + `</strong></p>
-    <button type='button' class='restart restart-button'>Click here to restart the game!</button>
+    <button type='button' class='restart'>Click here to restart the game!</button>
     <script>
       $('.restart').on('click', function() {
         location.reload();
@@ -327,7 +322,7 @@ function winGame(duration) {
   );
 }
 
-// Calls functions moveCountReset, starsReset, sets variables firstClickedCard and matchedPairCount to 0, empties openCards Array. Empties HTML deck, shuffles the given cards and generates the deck, refreshes the page.
+// calls functions moveCountReset, starsReset, sets variables firstClickedCard and matchedPairCount to 0, empties openCards Array. Empties HTML deck, shuffles the given cards and generates the deck, refreshes the page.
 $('.restart').on('click', function() {
   moveCountReset();
   starsReset();
